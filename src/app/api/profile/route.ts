@@ -1,20 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getUserState, setUserState } from '@/lib/firestore';
+import { NextResponse } from 'next/server';
 
-export async function POST(request: NextRequest) {
-    try {
-        const { userName } = await request.json();
-        if (!userName || typeof userName !== 'string' || userName.trim().length < 2) {
-            return NextResponse.json({ success: false, error: 'Invalid name' }, { status: 400 });
-        }
-
-        const state = await getUserState();
-        state.userName = userName.trim();
-        await setUserState(state);
-
-        return NextResponse.json({ success: true, state });
-    } catch (err) {
-        console.error('[POST /api/profile]', err);
-        return NextResponse.json({ success: false, error: 'Failed to save name' }, { status: 500 });
-    }
+// This endpoint is deprecated — user profile (name, photo) now comes from Google Auth.
+export async function POST() {
+    return NextResponse.json(
+        { success: false, error: 'Deprecated: profile is managed via Google Auth' },
+        { status: 410 }
+    );
 }
