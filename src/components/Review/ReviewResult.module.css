@@ -1,0 +1,209 @@
+.container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.scoreSummary {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.scoreCircle {
+    flex-shrink: 0;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.scoreNumber {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.scoreOf {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.scoreInfo {
+    flex: 1;
+}
+
+.scoreTitle {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.4rem;
+}
+
+.xpDelta {
+    display: inline-block;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.12);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-radius: 6px;
+    padding: 0.2rem 0.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.scoreDesc {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.section {}
+
+.sectionTitle {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 0.4rem;
+}
+
+.breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.breakdownRow {
+    display: grid;
+    grid-template-columns: 160px 1fr 50px;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.breakdownLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.breakdownBar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.breakdownFill {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.breakdownScore {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: right;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.strengthItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.65);
+    padding: 0.5rem 0.75rem;
+    background: rgba(52, 211, 153, 0.05);
+    border: 1px solid rgba(52, 211, 153, 0.15);
+    border-radius: 8px;
+}
+
+.strengthItem::before {
+    content: '✓';
+    color: #34d399;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.improvements {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.improvCard {
+    padding: 1rem 1.25rem;
+    background: rgba(251, 191, 36, 0.04);
+    border: 1px solid rgba(251, 191, 36, 0.15);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.improvProblem {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #fbbf24;
+}
+
+.improvWhy {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.5;
+}
+
+.improvHow {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.5;
+}
+
+.improvWhy strong,
+.improvHow strong {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag {
+    font-size: 0.75rem;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 0.3rem 0.75rem;
+    background: rgba(129, 140, 248, 0.1);
+    border: 1px solid rgba(129, 140, 248, 0.25);
+    color: #818cf8;
+    border-radius: 999px;
+}

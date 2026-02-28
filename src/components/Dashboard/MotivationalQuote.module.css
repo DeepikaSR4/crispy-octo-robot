@@ -1,0 +1,58 @@
+.container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+}
+
+.progress {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.emoji {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.4));
+}
+
+.progressMsg {
+    font-size: 0.9rem;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+}
+
+.divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.quote {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.quoteText {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+    line-height: 1.6;
+}
+
+.author {
+    font-size: 0.7rem;
+    font-style: normal;
+    color: rgba(255, 255, 255, 0.22);
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+}

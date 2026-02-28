@@ -1,0 +1,307 @@
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.previewBanner {
+    background: linear-gradient(90deg, rgba(251, 191, 36, 0.12), rgba(251, 191, 36, 0.06));
+    border-bottom: 1px solid rgba(251, 191, 36, 0.25);
+    padding: 0.6rem 2rem;
+    font-size: 0.78rem;
+    color: #fbbf24;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.backLink {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.backLink:hover {
+    color: #c084fc;
+}
+
+.main {
+    flex: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 2rem 1.5rem 4rem;
+}
+
+.section {
+    margin-bottom: 2rem;
+}
+
+.sectionLabel {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+    margin-bottom: 0.75rem;
+}
+
+.divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(192, 132, 252, 0.2), transparent);
+    margin: 0.5rem 0 2.5rem;
+}
+
+/* Week Grid */
+.weekGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 800px) {
+    .weekGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.weekCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.weekCard:hover {
+    border-color: rgba(52, 211, 153, 0.4);
+    background: rgba(52, 211, 153, 0.05);
+    transform: translateY(-2px);
+}
+
+.weekCardActive {
+    border-color: #c084fc !important;
+    background: rgba(192, 132, 252, 0.08) !important;
+    box-shadow: 0 0 0 1px rgba(192, 132, 252, 0.3), 0 8px 24px rgba(192, 132, 252, 0.12);
+}
+
+.wcWeek {
+    font-size: 0.6rem;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.wcTitle {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.wcScore {
+    margin-top: 0.25rem;
+}
+
+.wcScoreNum {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #34d399;
+}
+
+.wcScoreDen {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.wcBadge {
+    font-size: 0.65rem;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: 999px;
+    padding: 0.15rem 0.5rem;
+    display: inline-block;
+}
+
+.wcThreshold {
+    font-size: 0.65rem;
+    color: #34d399;
+    margin-top: 0.25rem;
+}
+
+/* Week Detail */
+.weekDetailHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+}
+
+.weekDetailTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.weekPill {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(192, 132, 252, 0.15);
+    border: 1px solid rgba(192, 132, 252, 0.4);
+    color: #c084fc;
+    border-radius: 6px;
+    padding: 0.25rem 0.6rem;
+}
+
+.weekDetailTheme {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+}
+
+.weekScoreBig {
+    text-align: right;
+}
+
+.weekScoreNum {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #34d399;
+    line-height: 1;
+}
+
+.weekScoreDen {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.weekScoreLabel {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.2rem;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+}
+
+.tab:hover {
+    border-color: rgba(192, 132, 252, 0.3);
+    color: #fff;
+}
+
+.activeTab {
+    border-color: #c084fc !important;
+    background: rgba(192, 132, 252, 0.08) !important;
+    color: #c084fc !important;
+}
+
+.tabScore {
+    font-size: 0.75rem;
+    background: rgba(192, 132, 252, 0.15);
+    border-radius: 4px;
+    padding: 0.15rem 0.4rem;
+    color: #c084fc;
+}
+
+/* Task Card */
+.taskCard {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.taskLabel {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.75rem;
+}
+
+.reqList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.reqItem {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.55);
+    padding: 0.35rem 0.6rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+}
+
+.reqItem::before {
+    content: '▸';
+    color: #34d399;
+    flex-shrink: 0;
+}
+
+/* Result section */
+.resultSection {
+    margin-bottom: 1.25rem;
+}
+
+.resultHeader {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    margin-bottom: 0.75rem;
+}

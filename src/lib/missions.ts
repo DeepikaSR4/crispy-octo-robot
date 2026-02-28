@@ -1,0 +1,160 @@
+import { WeekDefinition } from '@/types';
+
+export const WEEKS: WeekDefinition[] = [
+    {
+        id: 1,
+        title: 'Foundation Builder',
+        theme: 'Solid Architecture Fundamentals',
+        badge: 'Foundation Knight',
+        badgeIcon: '⚔️',
+        unlockThreshold: 70,
+        taskA: {
+            id: 'a',
+            label: 'Task A – Flutter Architecture Refactor',
+            technology: 'Flutter',
+            description: 'Refactor a Flutter app with clean separation of concerns — presentation, domain, and data layers — with proper state management and API abstraction.',
+            requirements: [
+                'Proper folder separation: presentation / domain / data',
+                'State management (Provider, Riverpod, Bloc, or GetX)',
+                'API calls fully separated from UI',
+                'Loading, empty, and error states handled',
+                'README explaining architecture & scalability decisions',
+            ],
+        },
+        taskB: {
+            id: 'b',
+            label: 'Task B – SwiftUI Notes App',
+            technology: 'SwiftUI',
+            description: 'Build a complete Notes app in SwiftUI with full CRUD, local persistence, MVVM architecture, and clean UI.',
+            requirements: [
+                'Add / Edit / Delete notes',
+                'NavigationStack-based navigation',
+                'Local persistence (Core Data or SwiftData)',
+                'MVVM pattern enforced',
+                'Clean, polished UI',
+                'README explaining state management & architecture',
+            ],
+        },
+    },
+    {
+        id: 2,
+        title: 'Systems Thinker',
+        theme: 'Performance & Scalable Patterns',
+        badge: 'System Builder',
+        badgeIcon: '🏗️',
+        unlockThreshold: 70,
+        taskA: {
+            id: 'a',
+            label: 'Task A – Flutter Performance Optimization',
+            technology: 'Flutter',
+            description: 'Optimize an existing Flutter app for performance — minimizing rebuilds, extracting reusable widgets, and separating business logic.',
+            requirements: [
+                'Widget rebuild optimization (const constructors, keys)',
+                'Extract reusable widget components',
+                'Business logic fully separated from UI',
+                'Loading / error / empty states for all async flows',
+                'DevTools profiling used and documented',
+                'README with before/after performance comparison',
+            ],
+        },
+        taskB: {
+            id: 'b',
+            label: 'Task B – SwiftUI Login + Dashboard',
+            technology: 'SwiftUI',
+            description: 'Build a SwiftUI Login flow with validation, a Dashboard screen, logout, and full MVVM + service layer.',
+            requirements: [
+                'Email / password validation (format & length)',
+                'Login button disabled when inputs are invalid',
+                'Loading and error states on login',
+                'Dashboard screen with meaningful content',
+                'Logout functionality',
+                'MVVM separation enforced',
+                'Service layer abstraction',
+                'README explaining architecture',
+            ],
+        },
+    },
+    {
+        id: 3,
+        title: 'AI Integrator',
+        theme: 'LLM Integration & Async Architecture',
+        badge: 'AI Tactician',
+        badgeIcon: '🤖',
+        unlockThreshold: 75,
+        taskA: {
+            id: 'a',
+            label: 'Task A – AI Integration in Flutter',
+            technology: 'Flutter',
+            description: 'Integrate a real LLM API into a Flutter app with streaming, retry logic, structured prompts, and graceful error handling.',
+            requirements: [
+                'Integrate a real LLM API (Gemini, OpenAI, etc.)',
+                'Structured prompt engineering visible in code',
+                'Loading / streaming states implemented',
+                'Retry mechanism on failure',
+                'Graceful error fallback UI',
+                'README explaining AI integration architecture',
+            ],
+        },
+        taskB: {
+            id: 'b',
+            label: 'Task B – SwiftUI AI Chat App',
+            technology: 'SwiftUI',
+            description: 'Build a conversational AI chat app in SwiftUI with async networking, MVVM separation, and proper message modelling.',
+            requirements: [
+                'Chat UI with message bubbles (user / assistant)',
+                'Async networking to LLM API',
+                'MVVM separation (ChatViewModel)',
+                'Message model struct defined',
+                'Error handling for network failures',
+                'README explaining AI flow & architecture',
+            ],
+        },
+    },
+    {
+        id: 4,
+        title: 'Product Engineer',
+        theme: 'User-Centric Thinking & Product Craft',
+        badge: 'Product Engineer',
+        badgeIcon: '🚀',
+        unlockThreshold: 80,
+        taskA: {
+            id: 'a',
+            label: 'Task A – Flutter Product Enhancement',
+            technology: 'Flutter',
+            description: 'Ship a user-driven product improvement to an existing Flutter app — focused on real user value, measurable impact, and product thinking.',
+            requirements: [
+                'Choose one: Improve onboarding, add analytics, improve UX flow, or add a user-driven feature',
+                'User problem clearly defined in README',
+                'Target persona described',
+                'Success metric defined (how you\'ll know it worked)',
+                'Architecture reasoning documented',
+                'Scalability plan described',
+            ],
+        },
+        taskB: {
+            id: 'b',
+            label: 'Task B – SwiftUI Habit Tracker with Analytics',
+            technology: 'SwiftUI',
+            description: 'Build a Habit Tracker in SwiftUI with Charts, local persistence, MVVM architecture, and product metrics thinking.',
+            requirements: [
+                'Habit tracking (add, complete, delete habits)',
+                'Charts / analytics view (completion rate, streaks)',
+                'Local persistence (Core Data or SwiftData)',
+                'MVVM architecture enforced',
+                'Product metrics defined: what success looks like',
+                'README explaining product thinking & architecture',
+            ],
+        },
+    },
+];
+
+export const WEEK_MAP = Object.fromEntries(WEEKS.map((w) => [w.id, w]));
+
+export const DEFAULT_WEEK_1_UNLOCKED = [1];
+
+export const LEVEL_THRESHOLDS = [
+    { min: 0, max: 99, title: 'Intern' },
+    { min: 100, max: 199, title: 'Junior Dev' },
+    { min: 200, max: 299, title: 'Engineer' },
+    { min: 300, max: 400, title: 'Product Engineer' },
+] as const;

@@ -1,0 +1,85 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+
+.logo {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #c084fc;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 20px rgba(192, 132, 252, 0.4);
+}
+
+.tagline {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.08em;
+  margin-top: 2px;
+}
+
+.greeting {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 3px;
+  font-family: 'Inter', sans-serif;
+}
+
+.greetingName {
+  color: #fff;
+  font-weight: 600;
+}
+
+.greetingLevel {
+  font-weight: 700;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.levelBadge {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  border: 1px solid;
+  border-radius: 6px;
+  padding: 0.3rem 0.75rem;
+  text-transform: uppercase;
+}
+
+.xpBlock {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.xpValue {
+  color: #fbbf24;
+}
+
+.xpMax {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.85rem;
+}
+
+.percentBadge {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 0.25rem 0.6rem;
+}

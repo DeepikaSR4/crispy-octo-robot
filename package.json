@@ -1,0 +1,30 @@
+{
+  "name": "crispy-octo-robot",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@octokit/rest": "^22.0.1",
+    "canvas-confetti": "^1.9.4",
+    "firebase": "^12.9.0",
+    "firebase-admin": "^13.7.0",
+    "framer-motion": "^12.34.3",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "typescript": "^5"
+  }
+}

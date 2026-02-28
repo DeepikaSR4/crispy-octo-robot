@@ -1,0 +1,156 @@
+.container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.875rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.bestBadge {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #c084fc;
+    background: rgba(192, 132, 252, 0.1);
+    border: 1px solid rgba(192, 132, 252, 0.25);
+    border-radius: 6px;
+    padding: 0.15rem 0.5rem;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background 0.2s ease;
+    gap: 1rem;
+}
+
+.item:last-child {
+    border-bottom: none;
+}
+
+.item:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.bestItem {
+    background: rgba(251, 191, 36, 0.04);
+}
+
+.latestItem {
+    background: rgba(192, 132, 252, 0.04);
+}
+
+.itemLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.attemptNum {
+    font-size: 0.65rem;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.1em;
+}
+
+.timestamp {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.repoLink {
+    font-size: 0.7rem;
+    color: rgba(129, 140, 248, 0.7);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+}
+
+.repoLink:hover {
+    color: #818cf8;
+}
+
+.itemRight {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.delta {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 4px;
+    padding: 0.1rem 0.35rem;
+}
+
+.deltaPos {
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.1);
+}
+
+.deltaNeg {
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.1);
+}
+
+.deltaZero {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.score {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.star {
+    font-size: 0.8rem;
+}
+
+.footer {
+    padding: 0.6rem 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 0.75rem;
+}
+
+.footerPos {
+    color: #34d399;
+}
+
+.footerNeg {
+    color: #f87171;
+}
+
+.footerNeutral {
+    color: rgba(255, 255, 255, 0.35);
+}

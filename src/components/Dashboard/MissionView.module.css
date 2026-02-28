@@ -1,0 +1,200 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.weekHeader {
+    margin-bottom: -0.5rem;
+}
+
+.weekTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.weekBadge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(192, 132, 252, 0.15);
+    border: 1px solid rgba(192, 132, 252, 0.4);
+    color: #c084fc;
+    border-radius: 6px;
+    padding: 0.25rem 0.6rem;
+}
+
+.weekTheme {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    margin-left: 0;
+}
+
+.tabs {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+}
+
+.tab:hover {
+    border-color: rgba(192, 132, 252, 0.3);
+    color: #fff;
+}
+
+.activeTab {
+    border-color: #c084fc !important;
+    background: rgba(192, 132, 252, 0.08) !important;
+    color: #c084fc !important;
+}
+
+.tabTech {}
+
+.tabScore {
+    font-size: 0.75rem;
+    background: rgba(192, 132, 252, 0.15);
+    border-radius: 4px;
+    padding: 0.15rem 0.4rem;
+    color: #c084fc;
+}
+
+.taskCard {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.taskLabel {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.4rem;
+}
+
+.taskDesc {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+}
+
+.requirements {}
+
+.reqHeading {
+    font-size: 0.75rem;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.reqList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.reqItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.65);
+    padding: 0.4rem 0.6rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.reqItem::before {
+    content: '▸';
+    color: #c084fc;
+    flex-shrink: 0;
+}
+
+.threshold {
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.35);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 0.75rem;
+}
+
+.threshold strong {
+    color: #fbbf24;
+}
+
+.thresholdNote {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.errorBox {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    color: #fca5a5;
+    font-size: 0.85rem;
+}
+
+.locked {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+}
+
+.lockIcon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.lockTitle {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0.5rem;
+}
+
+.lockDesc {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.3);
+    max-width: 400px;
+}
