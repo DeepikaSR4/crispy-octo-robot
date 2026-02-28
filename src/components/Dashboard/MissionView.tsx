@@ -11,11 +11,12 @@ import styles from './MissionView.module.css';
 interface Props {
     state: UserState;
     weekId: number;
+    idToken: string;
     onStateUpdate: (state: UserState) => void;
     onUnlock: () => void;
 }
 
-export default function MissionView({ state, weekId, onStateUpdate, onUnlock }: Props) {
+export default function MissionView({ state, weekId, idToken, onStateUpdate, onUnlock }: Props) {
     const [activeTask, setActiveTask] = useState<'a' | 'b'>('a');
     const [reviewing, setReviewing] = useState(false);
     const [lastResult, setLastResult] = useState<AIReviewResult | null>(null);
@@ -36,7 +37,10 @@ export default function MissionView({ state, weekId, onStateUpdate, onUnlock }: 
         try {
             const res = await fetch('/api/review', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${idToken}`,
+                },
                 body: JSON.stringify({ repoUrl, weekId, taskId: activeTask }),
             });
 

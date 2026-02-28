@@ -1,6 +1,5 @@
 /**
- * Firestore REST API client — works reliably in Next.js API routes
- * without the WebSocket/offline issues of the Firebase web SDK.
+ * Firestore REST API client — per-user data at levelup/{uid}
  */
 
 import { UserState, LevelTitle } from '@/types';
@@ -10,8 +9,15 @@ const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!;
 const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY!;
 const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 const COLLECTION = 'levelup';
-const DOC_ID = 'main_user';
-const DOC_URL = `${FIRESTORE_BASE}/${COLLECTION}/${DOC_ID}?key=${API_KEY}`;
+
+function docUrl(uid: string, key?: string) {
+    const base = `${FIRESTORE_BASE}/${COLLECTION}/${uid}?key=${API_KEY}`;
+    return key ? `${base}&key=${API_KEY}`.replace(/\?key.*/, `?key=${API_KEY}`) : base;
+}
+
+function collectionUrl() {
+    return `${FIRESTORE_BASE}/${COLLECTION}?key=${API_KEY}`;
+}
 
 // ─── Firestore Value Converters ───────────────────────────────────────────────
 
@@ -28,13 +34,10 @@ function toFS(value: unknown): FSValue {
     if (value === null || value === undefined) return { nullValue: null };
     if (typeof value === 'boolean') return { booleanValue: value };
     if (typeof value === 'number') {
-        if (Number.isInteger(value)) return { integerValue: String(value) };
-        return { doubleValue: value };
+        return Number.isInteger(value) ? { integerValue: String(value) } : { doubleValue: value };
     }
     if (typeof value === 'string') return { stringValue: value };
-    if (Array.isArray(value)) {
-        return { arrayValue: { values: value.map(toFS) } };
-    }
+    if (Array.isArray(value)) return { arrayValue: { values: value.map(toFS) } };
     if (typeof value === 'object') {
         const fields: Record<string, FSValue> = {};
         for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
@@ -51,62 +54,45 @@ function fromFS(fsValue: FSValue): unknown {
     if ('integerValue' in fsValue) return Number(fsValue.integerValue);
     if ('doubleValue' in fsValue) return fsValue.doubleValue;
     if ('stringValue' in fsValue) return fsValue.stringValue;
-    if ('arrayValue' in fsValue) {
-        return (fsValue.arrayValue.values ?? []).map(fromFS);
-    }
+    if ('arrayValue' in fsValue) return (fsValue.arrayValue.values ?? []).map(fromFS);
     if ('mapValue' in fsValue) {
         const obj: Record<string, unknown> = {};
-        for (const [k, v] of Object.entries(fsValue.mapValue.fields ?? {})) {
-            obj[k] = fromFS(v);
-        }
+        for (const [k, v] of Object.entries(fsValue.mapValue.fields ?? {})) obj[k] = fromFS(v);
         return obj;
     }
     return null;
 }
 
-function docToObject(fields: Record<string, FSValue>): Record<string, unknown> {
+function fieldsToObject(fields: Record<string, FSValue>): Record<string, unknown> {
     const obj: Record<string, unknown> = {};
-    for (const [k, v] of Object.entries(fields)) {
-        obj[k] = fromFS(v);
-    }
+    for (const [k, v] of Object.entries(fields)) obj[k] = fromFS(v);
     return obj;
 }
 
 function objectToFields(obj: Record<string, unknown>): Record<string, FSValue> {
     const fields: Record<string, FSValue> = {};
-    for (const [k, v] of Object.entries(obj)) {
-        fields[k] = toFS(v);
-    }
+    for (const [k, v] of Object.entries(obj)) fields[k] = toFS(v);
     return fields;
 }
 
-// ─── REST Helpers ────────────────────────────────────────────────────────────
+// ─── REST Helpers ─────────────────────────────────────────────────────────────
 
-async function firestoreGet(url: string): Promise<Record<string, FSValue> | null> {
-    const res = await fetch(url, {
-        headers: { 'Content-Type': 'application/json' },
-        cache: 'no-store',
-    });
+async function fsGet(url: string): Promise<Record<string, FSValue> | null> {
+    const res = await fetch(url, { headers: { 'Content-Type': 'application/json' }, cache: 'no-store' });
     if (res.status === 404) return null;
-    if (!res.ok) {
-        const body = await res.text();
-        throw new Error(`Firestore GET failed [${res.status}]: ${body}`);
-    }
+    if (!res.ok) { const b = await res.text(); throw new Error(`Firestore GET [${res.status}]: ${b}`); }
     const data = await res.json();
     return data.fields ?? {};
 }
 
-async function firestoreSet(url: string, fields: Record<string, FSValue>): Promise<void> {
+async function fsPatch(url: string, fields: Record<string, FSValue>): Promise<void> {
     const res = await fetch(url, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fields }),
         cache: 'no-store',
     });
-    if (!res.ok) {
-        const body = await res.text();
-        throw new Error(`Firestore SET failed [${res.status}]: ${body}`);
-    }
+    if (!res.ok) { const b = await res.text(); throw new Error(`Firestore PATCH [${res.status}]: ${b}`); }
 }
 
 // ─── Business Logic ───────────────────────────────────────────────────────────
@@ -118,7 +104,7 @@ function calculateLevel(xp: number): LevelTitle {
     return 'Intern';
 }
 
-function getDefaultState(): UserState {
+function getDefaultState(uid: string, profile: { userName?: string; email?: string; photoURL?: string }): UserState {
     const taskAttempts: UserState['taskAttempts'] = {};
     WEEKS.forEach((w) => {
         taskAttempts[`w${w.id}a`] = { attempts: [], best_score: 0 };
@@ -131,74 +117,93 @@ function getDefaultState(): UserState {
         level: 'Intern',
         taskAttempts,
         badgesEarned: [],
+        lastSeen: new Date().toISOString(),
+        ...profile,
     };
 }
 
-export async function getUserState(): Promise<UserState> {
-    const fields = await firestoreGet(DOC_URL);
+export async function getUserState(uid: string, profile?: { userName?: string; email?: string; photoURL?: string }): Promise<UserState> {
+    const url = docUrl(uid);
+    const fields = await fsGet(url);
+
     if (!fields || Object.keys(fields).length === 0) {
-        const defaultState = getDefaultState();
-        await setUserState(defaultState);
+        const defaultState = getDefaultState(uid, profile ?? {});
+        await setUserState(uid, defaultState);
         return defaultState;
     }
-    return docToObject(fields) as unknown as UserState;
+
+    const state = fieldsToObject(fields) as unknown as UserState;
+    // Update profile fields + lastSeen on every load
+    if (profile) {
+        state.userName = profile.userName ?? state.userName;
+        state.email = profile.email ?? state.email;
+        state.photoURL = profile.photoURL ?? state.photoURL;
+    }
+    state.lastSeen = new Date().toISOString();
+    await setUserState(uid, state);
+    return state;
 }
 
-export async function setUserState(state: UserState): Promise<void> {
+export async function setUserState(uid: string, state: UserState): Promise<void> {
     const fields = objectToFields(state as unknown as Record<string, unknown>);
-    await firestoreSet(DOC_URL, fields);
+    await fsPatch(docUrl(uid), fields);
 }
 
 export async function recordAttempt(
+    uid: string,
     weekId: number,
     taskId: 'a' | 'b',
     score: number,
     repoUrl: string,
-    reviewResult: import('@/types').AIReviewResult
+    reviewResult: import('@/types').AIReviewResult,
+    profile?: { userName?: string; email?: string; photoURL?: string }
 ): Promise<{ state: UserState; unlocked: boolean; xpDelta: number }> {
-    const state = await getUserState();
+    const state = await getUserState(uid, profile);
     const key = `w${weekId}${taskId}`;
     const taskState = state.taskAttempts[key] ?? { attempts: [], best_score: 0 };
     const prevBest = taskState.best_score;
 
-    const newAttempt: import('@/types').TaskAttempt = {
+    taskState.attempts.push({
         score,
         timestamp: new Date().toISOString(),
         repoUrl,
         reviewResult,
-    };
-    taskState.attempts.push(newAttempt);
+    });
 
     let xpDelta = 0;
     if (score > prevBest) {
         xpDelta = score - prevBest;
         taskState.best_score = score;
     }
-
     state.taskAttempts[key] = taskState;
 
-    // Recalculate total XP
     let totalXP = 0;
     Object.values(state.taskAttempts).forEach((ts) => { totalXP += ts.best_score; });
     state.xp = totalXP;
     state.level = calculateLevel(totalXP);
 
-    // Check week unlock
     const week = WEEKS.find((w) => w.id === weekId)!;
-    const taskABest = state.taskAttempts[`w${weekId}a`]?.best_score ?? 0;
-    const taskBBest = state.taskAttempts[`w${weekId}b`]?.best_score ?? 0;
-    const weekScore = taskABest + taskBBest;
+    const weekScore = (state.taskAttempts[`w${weekId}a`]?.best_score ?? 0) + (state.taskAttempts[`w${weekId}b`]?.best_score ?? 0);
 
     let unlocked = false;
     if (weekScore >= week.unlockThreshold && weekId < 4 && !state.unlockedWeeks.includes(weekId + 1)) {
         state.unlockedWeeks.push(weekId + 1);
         state.currentWeek = weekId + 1;
         unlocked = true;
-        if (!state.badgesEarned.includes(week.badge)) {
-            state.badgesEarned.push(week.badge);
-        }
+        if (!state.badgesEarned.includes(week.badge)) state.badgesEarned.push(week.badge);
     }
 
-    await setUserState(state);
+    await setUserState(uid, state);
     return { state, unlocked, xpDelta };
+}
+
+export async function getAllUsers(): Promise<(UserState & { uid: string })[]> {
+    const res = await fetch(collectionUrl(), { headers: { 'Content-Type': 'application/json' }, cache: 'no-store' });
+    if (!res.ok) { const b = await res.text(); throw new Error(`Firestore LIST [${res.status}]: ${b}`); }
+    const data = await res.json();
+    if (!data.documents) return [];
+    return data.documents.map((doc: { name: string; fields: Record<string, FSValue> }) => {
+        const uid = doc.name.split('/').pop()!;
+        return { uid, ...(fieldsToObject(doc.fields) as unknown as UserState) };
+    });
 }

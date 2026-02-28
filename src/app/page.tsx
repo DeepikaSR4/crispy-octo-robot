@@ -1,23 +1,35 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import { UserState } from '@/types';
 import Header from '@/components/Dashboard/Header';
 import XPProgressBar from '@/components/Dashboard/XPProgressBar';
 import WeekTimeline from '@/components/Dashboard/WeekTimeline';
 import BadgeDisplay from '@/components/Dashboard/BadgeDisplay';
 import MotivationalQuote from '@/components/Dashboard/MotivationalQuote';
-import OnboardingModal from '@/components/UI/OnboardingModal';
 import styles from './page.module.css';
 
+const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL ?? '';
+
 export default function DashboardPage() {
+  const { user, idToken, loading: authLoading, signOut } = useAuth();
+  const router = useRouter();
   const [state, setState] = useState<UserState | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!authLoading && !user) router.replace('/login');
+  }, [user, authLoading, router]);
+
   const loadState = useCallback(async () => {
+    if (!idToken) return;
     try {
-      const res = await fetch('/api/state');
+      const res = await fetch('/api/state', {
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
       const data = await res.json();
       if (!data.success || !data.state) throw new Error(data.error ?? 'Failed to load state');
       setState(data.state);
@@ -26,15 +38,13 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [idToken]);
 
-  useEffect(() => { loadState(); }, [loadState]);
+  useEffect(() => {
+    if (idToken) loadState();
+  }, [idToken, loadState]);
 
-  function handleOnboardingComplete(name: string) {
-    if (state) setState({ ...state, userName: name });
-  }
-
-  if (loading) {
+  if (authLoading || (loading && !error)) {
     return (
       <div className={styles.loadingScreen}>
         <div className={styles.loadingSpinner} />
@@ -49,42 +59,34 @@ export default function DashboardPage() {
         <div className={styles.errorIcon}>⚠️</div>
         <div className={styles.errorTitle}>Failed to Load Dashboard</div>
         <div className={styles.errorDesc}>{error}</div>
-        <div className={styles.errorHint}>
-          Make sure your <code>.env.local</code> file has valid Firebase credentials, then refresh.
-        </div>
         <button className={styles.retryBtn} onClick={loadState}>Retry</button>
       </div>
     );
   }
 
+  const isAdmin = user?.email === ADMIN_EMAIL;
+
   return (
-    <>
-      {/* Show onboarding modal on first visit (no userName stored yet) */}
-      {!state.userName && (
-        <OnboardingModal onComplete={handleOnboardingComplete} />
-      )}
+    <div className={styles.page}>
+      <Header state={state} onSignOut={signOut} isAdmin={isAdmin} />
+      <main className={styles.main}>
+        <section className={styles.section}>
+          <XPProgressBar state={state} />
+        </section>
 
-      <div className={styles.page}>
-        <Header state={state} />
-        <main className={styles.main}>
-          <section className={styles.section}>
-            <XPProgressBar state={state} />
-          </section>
+        <section className={styles.section}>
+          <MotivationalQuote state={state} />
+        </section>
 
-          <section className={styles.section}>
-            <MotivationalQuote state={state} />
-          </section>
+        <section className={styles.section}>
+          <div className={styles.sectionLabel}>4-Week Evolution Timeline — click a week to start</div>
+          <WeekTimeline state={state} selectedWeek={state.currentWeek} />
+        </section>
 
-          <section className={styles.section}>
-            <div className={styles.sectionLabel}>4-Week Evolution Timeline — click a week to start</div>
-            <WeekTimeline state={state} selectedWeek={state.currentWeek} />
-          </section>
-
-          <section className={styles.section}>
-            <BadgeDisplay state={state} />
-          </section>
-        </main>
-      </div>
-    </>
+        <section className={styles.section}>
+          <BadgeDisplay state={state} />
+        </section>
+      </main>
+    </div>
   );
 }

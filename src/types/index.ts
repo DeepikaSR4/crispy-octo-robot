@@ -44,15 +44,18 @@ export interface TaskState {
 export type LevelTitle = 'Intern' | 'Junior Dev' | 'Engineer' | 'Product Engineer';
 
 export interface UserState {
-  currentWeek: number;           // 1–4
-  unlockedWeeks: number[];       // e.g. [1, 2]
-  xp: number;                    // 0–400
+  currentWeek: number;
+  unlockedWeeks: number[];
+  xp: number;
   level: LevelTitle;
-  userName?: string;             // set during onboarding
+  userName?: string;
+  email?: string;
+  photoURL?: string;
+  lastSeen?: string;      // ISO timestamp
   taskAttempts: {
-    [key: string]: TaskState;    // key format: "w1a", "w1b", "w2a", etc.
+    [key: string]: TaskState;
   };
-  badgesEarned: string[];        // badge names
+  badgesEarned: string[];
 }
 
 // ─── Mission / Week Definitions ───────────────────────────────────────────────

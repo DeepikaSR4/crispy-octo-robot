@@ -2,15 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { fetchRepoContent } from '@/lib/github';
 import { reviewRepo } from '@/lib/aiReview';
 import { recordAttempt } from '@/lib/firestore';
+import { authFromRequest } from '@/lib/auth';
 import { WEEK_MAP } from '@/lib/missions';
 import { ReviewRequest, ReviewResponse } from '@/types';
 
 export async function POST(request: NextRequest) {
     try {
+        const { uid, displayName, email, photoUrl } = await authFromRequest(request);
+
         const body: ReviewRequest = await request.json();
         const { repoUrl, weekId, taskId } = body;
 
-        // Validate inputs
         if (!repoUrl || !weekId || !taskId) {
             return NextResponse.json<ReviewResponse>(
                 { success: false, error: 'Missing required fields: repoUrl, weekId, taskId' },
@@ -28,16 +30,13 @@ export async function POST(request: NextRequest) {
 
         const task = taskId === 'a' ? week.taskA : week.taskB;
 
-        // Step 1: Fetch repo content from GitHub
+        // Step 1: Fetch GitHub repo content
         let repoContent;
         try {
             repoContent = await fetchRepoContent(repoUrl);
         } catch (err) {
             const msg = err instanceof Error ? err.message : 'Failed to fetch GitHub repository';
-            return NextResponse.json<ReviewResponse>(
-                { success: false, error: msg },
-                { status: 422 }
-            );
+            return NextResponse.json<ReviewResponse>({ success: false, error: msg }, { status: 422 });
         }
 
         // Step 2: AI Review
@@ -46,19 +45,18 @@ export async function POST(request: NextRequest) {
             reviewResult = await reviewRepo(repoContent, task.label, task.requirements);
         } catch (err) {
             const msg = err instanceof Error ? err.message : 'AI review failed. Please try again.';
-            return NextResponse.json<ReviewResponse>(
-                { success: false, error: msg },
-                { status: 500 }
-            );
+            return NextResponse.json<ReviewResponse>({ success: false, error: msg }, { status: 500 });
         }
 
-        // Step 3: Record attempt and update state
+        // Step 3: Record attempt under uid
         const { state, unlocked } = await recordAttempt(
+            uid,
             weekId,
             taskId,
             reviewResult.total_score,
             repoUrl,
-            reviewResult
+            reviewResult,
+            { userName: displayName, email, photoURL: photoUrl }
         );
 
         return NextResponse.json<ReviewResponse>({
@@ -68,10 +66,8 @@ export async function POST(request: NextRequest) {
             unlocked,
         });
     } catch (err) {
-        console.error('[/api/review] Unexpected error:', err);
-        return NextResponse.json<ReviewResponse>(
-            { success: false, error: 'Internal server error' },
-            { status: 500 }
-        );
+        const message = err instanceof Error ? err.message : 'Internal server error';
+        const status = message.includes('Authorization') ? 401 : 500;
+        return NextResponse.json<ReviewResponse>({ success: false, error: message }, { status });
     }
 }

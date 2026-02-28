@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
 import { UserState } from '@/types';
 import { WEEK_MAP } from '@/lib/missions';
 import MissionView from '@/components/Dashboard/MissionView';
@@ -13,6 +14,7 @@ export default function WeekPage() {
     const params = useParams();
     const router = useRouter();
     const weekId = Number(params.id);
+    const { user, idToken, loading: authLoading } = useAuth();
 
     const [state, setState] = useState<UserState | null>(null);
     const [loading, setLoading] = useState(true);
@@ -22,9 +24,16 @@ export default function WeekPage() {
 
     const week = WEEK_MAP[weekId];
 
+    useEffect(() => {
+        if (!authLoading && !user) router.replace('/login');
+    }, [user, authLoading, router]);
+
     const loadState = useCallback(async () => {
+        if (!idToken) return;
         try {
-            const res = await fetch('/api/state');
+            const res = await fetch('/api/state', {
+                headers: { Authorization: `Bearer ${idToken}` },
+            });
             const data = await res.json();
             if (!data.success || !data.state) throw new Error(data.error ?? 'Failed to load');
             setState(data.state);
@@ -33,11 +42,12 @@ export default function WeekPage() {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [idToken]);
 
-    useEffect(() => { loadState(); }, [loadState]);
+    useEffect(() => {
+        if (idToken) loadState();
+    }, [idToken, loadState]);
 
-    // Redirect if invalid week
     useEffect(() => {
         if (!week) router.replace('/');
     }, [week, router]);
@@ -50,7 +60,7 @@ export default function WeekPage() {
 
     if (!week) return null;
 
-    if (loading) {
+    if (authLoading || loading) {
         return (
             <div className={styles.loadingScreen}>
                 <div className={styles.spinner} />
@@ -68,24 +78,17 @@ export default function WeekPage() {
         );
     }
 
-    const isUnlocked = state.unlockedWeeks.includes(weekId);
-
     return (
         <>
             <ConfettiEffect trigger={unlocked} />
-
             <div className={styles.page}>
-                {/* Top Nav */}
                 <nav className={styles.nav}>
-                    <Link href="/" className={styles.backLink}>
-                        ← Dashboard
-                    </Link>
+                    <Link href="/" className={styles.backLink}>← Dashboard</Link>
                     <div className={styles.navCenter}>
                         <span className={styles.navWeek}>Week {weekId}</span>
                         <span className={styles.navTitle}>{week.title}</span>
                     </div>
                     <div className={styles.navRight}>
-                        {/* Week switcher */}
                         <div className={styles.weekSwitcher}>
                             {[1, 2, 3, 4].map((wid) => {
                                 const isAvail = state.unlockedWeeks.includes(wid);
@@ -94,11 +97,7 @@ export default function WeekPage() {
                                     <Link
                                         key={wid}
                                         href={`/week/${wid}`}
-                                        className={[
-                                            styles.weekDot,
-                                            isCurrent ? styles.weekDotActive : '',
-                                            !isAvail ? styles.weekDotLocked : '',
-                                        ].join(' ')}
+                                        className={[styles.weekDot, isCurrent ? styles.weekDotActive : '', !isAvail ? styles.weekDotLocked : ''].join(' ')}
                                         title={`Week ${wid}: ${WEEK_MAP[wid]?.title}`}
                                         onClick={(e) => !isAvail && e.preventDefault()}
                                     >
@@ -110,7 +109,6 @@ export default function WeekPage() {
                     </div>
                 </nav>
 
-                {/* XP/Level strip */}
                 <div className={styles.strip}>
                     <span className={styles.stripXp}>⚡ {state.xp} XP</span>
                     <span className={styles.stripLevel}>{state.level}</span>
@@ -124,10 +122,7 @@ export default function WeekPage() {
                     )}
                 </div>
 
-                {/* Unlock toast */}
-                {unlockMessage && (
-                    <div className={styles.unlockToast}>{unlockMessage}</div>
-                )}
+                {unlockMessage && <div className={styles.unlockToast}>{unlockMessage}</div>}
 
                 <main className={styles.main}>
                     <MissionView
@@ -135,6 +130,7 @@ export default function WeekPage() {
                         weekId={weekId}
                         onStateUpdate={setState}
                         onUnlock={handleUnlock}
+                        idToken={idToken ?? ''}
                     />
                 </main>
             </div>
